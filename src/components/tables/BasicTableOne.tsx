@@ -11,7 +11,14 @@ import {
 } from "../ui/table";
 import UserDetailModal from "../example/ModalExample/UserDetailModal";
 
-// Definisi tipe data untuk karyawan
+interface Attendance {
+  date: string;
+  status: "Hadir" | "Izin" | "Sakit" | "Cuti";
+  timeIn?: string;
+  timeOut?: string;
+  isLate?: boolean;
+}
+
 interface UserDetail {
   id: number;
   image: string;
@@ -24,9 +31,9 @@ interface UserDetail {
   birthPlace: string;
   birthDate: string;
   domicile: string;
+  attendanceHistory: Attendance[];
 }
 
-// Data karyawan
 const usersData: UserDetail[] = [
   {
     id: 1,
@@ -40,6 +47,11 @@ const usersData: UserDetail[] = [
     birthPlace: "Jakarta",
     birthDate: "1990-01-10",
     domicile: "Jakarta Selatan",
+    attendanceHistory: [
+      { date: "2025-04-01", status: "Hadir", timeIn: "08:10", timeOut: "17:05", isLate: false },
+      { date: "2025-04-02", status: "Izin" },
+      { date: "2025-03-15", status: "Sakit" },
+    ],
   },
   {
     id: 2,
@@ -53,45 +65,10 @@ const usersData: UserDetail[] = [
     birthPlace: "Bandung",
     birthDate: "1988-05-22",
     domicile: "Bandung",
-  },
-  {
-    id: 3,
-    image: "/images/user/user-19.jpg",
-    name: "Zain Geidt",
-    email: "zain@example.com",
-    role: "Content Writer",
-    phone: "+62 813 4444 5555",
-    company: "IC Global",
-    address: "Jl. Mawar No. 20, Surabaya",
-    birthPlace: "Surabaya",
-    birthDate: "1992-09-15",
-    domicile: "Surabaya",
-  },
-  {
-    id: 4,
-    image: "/images/user/user-20.jpg",
-    name: "Abram Schleifer",
-    email: "abram@example.com",
-    role: "Digital Marketer",
-    phone: "+62 812 6666 7777",
-    company: "IC Global",
-    address: "Jl. Anggrek No. 5, Yogyakarta",
-    birthPlace: "Yogyakarta",
-    birthDate: "1985-12-30",
-    domicile: "Yogyakarta",
-  },
-  {
-    id: 5,
-    image: "/images/user/user-21.jpg",
-    name: "Carla George",
-    email: "carla@example.com",
-    role: "Front-end Developer",
-    phone: "+62 812 8888 9999",
-    company: "Ay's On You",
-    address: "Jl. Dahlia No. 8, Medan",
-    birthPlace: "Medan",
-    birthDate: "1991-07-18",
-    domicile: "Medan",
+    attendanceHistory: [
+      { date: "2025-04-01", status: "Hadir", timeIn: "08:20", timeOut: "17:00", isLate: true },
+      { date: "2025-03-22", status: "Hadir", timeIn: "08:00", timeOut: "17:00", isLate: false },
+    ],
   },
 ];
 
@@ -123,7 +100,6 @@ export default function UserTable() {
                   </TableCell>
                 </TableRow>
               </TableHeader>
-
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {usersData.map((user) => (
                   <TableRow
@@ -168,7 +144,6 @@ export default function UserTable() {
         </div>
       </div>
 
-      {/* Modal untuk menampilkan detail karyawan */}
       <UserDetailModal
         isOpen={selectedUser !== null}
         onClose={() => setSelectedUser(null)}
