@@ -5,6 +5,9 @@ import { Dialog } from "@headlessui/react";
 import Image from "next/image";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { HeroUIDatePicker } from "../../calendar/HeroUIDatePicker";
+
+
 
 interface Attendance {
   date: string;
@@ -37,12 +40,6 @@ interface Props {
 
 export default function UserDetailModal({ isOpen, onClose, user }: Props) {
   const [selectedMonth, setSelectedMonth] = useState("");
-
-  const monthOptions = useMemo(() => {
-    if (!user) return [];
-    const months = user.attendanceHistory.map((a) => a.date.slice(0, 7));
-    return Array.from(new Set(months));
-  }, [user]);
 
   const filteredAttendance = useMemo(() => {
     if (!user) return [];
@@ -121,21 +118,15 @@ export default function UserDetailModal({ isOpen, onClose, user }: Props) {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
             Filter Bulan:
           </label>
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="w-full md:w-64 rounded-md border-gray-300 dark:bg-gray-700 dark:text-white"
-          >
-            <option value="">Semua Bulan</option>
-            {monthOptions.map((month) => (
-              <option key={month} value={month}>
-                {new Date(month + "-01").toLocaleDateString("id-ID", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-3">
+            <HeroUIDatePicker onChange={(val) => setSelectedMonth(val)} />
+            <button
+              onClick={() => setSelectedMonth("")}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Reset Bulan
+            </button>
+          </div>
         </div>
 
         <div className="border-t pt-4">
