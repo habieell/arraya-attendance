@@ -738,3 +738,164 @@ span.flatpickr-weekday,
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
+
+/* ============================= */
+/* 🌞 Default (Light Mode) */
+/* ============================= */
+
+.rdp {
+  background-color: white;
+  color: black;
+  border-radius: 0.75rem; /* rounded-xl */
+  padding: 1rem;
+  box-shadow:
+    0px 12px 16px -4px rgba(16, 24, 40, 0.08),
+    0px 4px 6px -2px rgba(16, 24, 40, 0.03); /* Tailwind's shadow-lg */
+}
+
+.rdp-caption_label,
+.rdp-day,
+.rdp-head_cell {
+  color: #1f2937; /* Tailwind gray-800 */
+}
+
+.rdp-button:hover {
+  background-color: #f3f4f6; /* Tailwind gray-100 */
+}
+
+/* Selected day (light mode) */
+.rdp-day_selected,
+.rdp-day_selected:focus,
+.rdp-day_selected:hover {
+  background-color: #38bdf8 !important; /* Tailwind blue-400 */
+  color: white !important;
+}
+
+/* Hovered day (light mode) */
+.rdp-day:hover {
+  background-color: #e0f2fe !important; /* Tailwind blue-100 */
+  color: #0c4a6e !important;            /* Tailwind blue-900 */
+}
+
+/* Dropdown styling (light) */
+.rdp-dropdown {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db; /* Tailwind gray-300 */
+  background-color: white;
+  color: #111827; /* Tailwind gray-900 */
+}
+
+/* ============================= */
+/* 🌞 Default (Light Mode) */
+/* ============================= */
+
+.rdp {
+  background-color: white;
+  color: black;
+  border-radius: 0.75rem; /* rounded-xl */
+  padding: 1rem;
+  box-shadow:
+    0px 12px 16px -4px rgba(16, 24, 40, 0.08),
+    0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+}
+
+.rdp-caption_label,
+.rdp-day,
+.rdp-head_cell {
+  color: #1f2937; /* Tailwind gray-800 */
+}
+
+.rdp-button:hover {
+  background-color: #f3f4f6;
+}
+
+/* Nama hari (Su, Mo...) */
+.rdp-head_cell {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Selected day (light mode) */
+.rdp-day_selected:not([disabled]),
+.rdp-day_selected:focus:not([disabled]),
+.rdp-day_selected:hover:not([disabled]) {
+  background-color: #38bdf8 !important; /* Tailwind blue-400 */
+  color: white !important;
+  font-weight: 500;
+  border-radius: 0.375rem;
+}
+
+/* Hovered day (light mode) */
+.rdp-day:not(.rdp-day_selected):hover:not([disabled]) {
+  background-color: #e0f2fe !important; /* Tailwind blue-100 */
+  color: #0c4a6e !important;            /* Tailwind blue-900 */
+  border-radius: 0.375rem;
+}
+
+/* Dropdown styling */
+.rdp-dropdown {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #111827;
+}
+
+/* ============================= */
+/* 🌙 Dark Mode Styling */
+/* ============================= */
+
+.dark .rdp {
+  background-color: #1f2937;
+  color: white;
+  box-shadow:
+    0px 12px 16px -4px rgba(255, 255, 255, 0.08),
+    0px 4px 6px -2px rgba(255, 255, 255, 0.03);
+}
+
+.dark .rdp-months {
+  background-color: #1f2937;
+}
+
+.dark .rdp-caption_label,
+.dark .rdp-day {
+  color: white;
+}
+
+/* Fix label hari (Su, Mo...) di dark mode */
+.dark .rdp-head_cell {
+  color: white !important;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Selected day (dark mode) */
+.dark .rdp-day_selected:not([disabled]),
+.dark .rdp-day_selected:focus:not([disabled]),
+.dark .rdp-day_selected:hover:not([disabled]) {
+  background-color: #0ea5e9 !important; /* Tailwind blue-500 */
+  color: white !important;
+  font-weight: 500;
+  border-radius: 0.375rem;
+}
+
+/* Hovered day (dark mode) */
+.dark .rdp-day:not(.rdp-day_selected):hover:not([disabled]) {
+  background-color: #1e3a8a !important; /* Tailwind blue-900 */
+  color: white !important;
+  border-radius: 0.375rem;
+}
+
+/* Dropdown dark mode */
+.dark .rdp-dropdown {
+  background-color: #1f2937;
+  color: white;
+  border: 1px solid #4b5563;
+}
+
+.dark select {
+  background-color: #1f2937;
+  color: white;
+  border: 1px solid #4b5563;
+}

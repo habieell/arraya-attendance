@@ -36,6 +36,13 @@ const navItems: NavItem[] = [
   //   name: "Calendar",
   //   path: "/calendar",
   // },
+  
+  {
+    name: "Data Tabel",
+    icon: <TableIcon />,
+    subItems: [{ name: "Karyawan", path: "/basic-tables", pro: false }],
+  },
+
   {
     icon: <UserCircleIcon />,
     name: "User Profile",
@@ -48,19 +55,14 @@ const navItems: NavItem[] = [
   //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
   // },
   
-  {
-    name: "Data Tabel",
-    icon: <TableIcon />,
-    subItems: [{ name: "Karyawan", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
-  },
+  // {
+  //   name: "Pages",
+  //   icon: <PageIcon />,
+  //   subItems: [
+  //     { name: "Blank Page", path: "/blank", pro: false },
+  //     { name: "404 Error", path: "/error-404", pro: false },
+  //   ],
+  // },
 ];
 
 const othersItems: NavItem[] = [

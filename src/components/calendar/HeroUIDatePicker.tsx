@@ -15,7 +15,7 @@ export function HeroUIDatePicker({ onChange }: Props) {
   const [selected, setSelected] = useState<Date>();
   const [showCalendar, setShowCalendar] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const calendarRef = useRef<HTMLDivElement>(null); // <== Tambahan penting!
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const toggleCalendar = () => setShowCalendar((prev) => !prev);
   const closeCalendar = () => setShowCalendar(false);
