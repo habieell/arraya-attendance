@@ -3,7 +3,7 @@ import { EcommerceMetrics } from "@/components/dashboard/EcommerceMetrics";
 import React from "react";
 // import MonthlyTarget from "@/components/dashboard/MonthlyTarget";
 // import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
-import StatisticsChart from "@/components/dashboard/StatisticsChart";
+// import StatisticsChart from "@/components/dashboard/StatisticsChart";
 import RecentOrders from "@/components/dashboard/RecentOrders";
 // import DemographicCard from "@/components/ecommerce/DemographicCard";
 

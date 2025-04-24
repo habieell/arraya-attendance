@@ -11,7 +11,7 @@ import {
   GridIcon,
   HorizontaLDots,
   // ListIcon,
-  PageIcon,
+  // PageIcon,
   PieChartIcon,
   PlugInIcon,
   TableIcon,
@@ -40,7 +40,11 @@ const navItems: NavItem[] = [
   {
     name: "Data Tabel",
     icon: <TableIcon />,
-    subItems: [{ name: "Karyawan", path: "/basic-tables", pro: false }],
+    subItems: [
+      { name: "Karyawan", path: "/tabel-karyawan", pro: false },
+      { name: "Perizinan", path: "/tabel-perizinan", pro: false}
+
+    ],
   },
 
   {
@@ -330,7 +334,7 @@ const AppSidebar: React.FC = () => {
             </>
           ) : (
             <Image
-              src="/images/logo/logo-icon.svg"
+              src="/images/logo/logo-arraya.png"
               alt="Logo"
               width={32}
               height={32}

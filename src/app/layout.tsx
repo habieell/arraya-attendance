@@ -1,18 +1,24 @@
-import { Outfit } from 'next/font/google';
-import './globals.css';
+import { Outfit } from "next/font/google";
+import "./globals.css";
+import { SidebarProvider } from "@/context/SidebarContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
-import { SidebarProvider } from '@/context/SidebarContext';
-import { ThemeProvider } from '@/context/ThemeContext';
+const outfit = Outfit({ subsets: ["latin"] });
 
-const outfit = Outfit({
-  subsets: ["latin"],
-});
+export const metadata = {
+  title: "Admin Dashboard",
+  description: "Dashboard Karyawan & Perizinan",
+  icons: {
+    icon: "/images/logo/logo-arraya.png",
+  },
+};
+
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
