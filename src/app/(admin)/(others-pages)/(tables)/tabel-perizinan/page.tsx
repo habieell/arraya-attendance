@@ -1,5 +1,5 @@
 import ComponentCard from "@/components/common/ComponentCard";
-import PageBreadcrumb from "@/components/common/PageBreadcrumb";
+import PageBreadCrumb from "@/components/common/PageBreadCrumb";
 import { Metadata } from "next";
 import React from "react";
 import PerizinanTable from "@/components/tables/PerizinanTable";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function BasicTables() {
   return (
     <div>
-      <PageBreadcrumb pageTitle="Tabel Perizinan" />
+      <PageBreadCrumb pageTitle="Tabel Perizinan" />
       <div className="space-y-6">
         <ComponentCard title="Data Perizinan Karyawan">
           <PerizinanTable />
