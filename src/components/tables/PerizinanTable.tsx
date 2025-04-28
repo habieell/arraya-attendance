@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Cookies from "js-cookie";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
 import PerizinanDetailModal from "../example/ModalExample/PerizinanDetailModal";
