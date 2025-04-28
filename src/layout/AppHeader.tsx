@@ -73,9 +73,10 @@ const AppHeader: React.FC = () => {
 
           {/* Logo for mobile */}
           <Link href="/" className="lg:hidden">
-            <Image width={154} height={32} className="dark:hidden" src="/images/logo/logo.svg" alt="Logo" />
-            <Image width={154} height={32} className="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" />
+            <Image width={200} height={32} className="dark:hidden" src="/images/logo/arraya-hitam.png" alt="Logo" />
+            <Image width={200} height={32} className="hidden dark:block" src="/images/logo/arraya-putih.png" alt="Logo" />
           </Link>
+
 
           {/* App menu button (dots) */}
           <button
@@ -119,9 +120,8 @@ const AppHeader: React.FC = () => {
 
         {/* RIGHT SECTION */}
         <div
-          className={`${
-            isApplicationMenuOpen ? "flex" : "hidden"
-          } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
+          className={`${isApplicationMenuOpen ? "flex" : "hidden"
+            } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
             <ThemeToggleButton />
