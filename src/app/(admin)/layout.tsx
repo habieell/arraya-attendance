@@ -5,6 +5,7 @@ import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
 import React from "react";
+import { Toaster } from "react-hot-toast"; 
 
 export default function AdminLayout({
   children,
@@ -25,12 +26,17 @@ export default function AdminLayout({
       {/* Sidebar and Backdrop */}
       <AppSidebar />
       <Backdrop />
+
       {/* Main Content Area */}
       <div
-        className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
+        className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
       >
         {/* Header */}
         <AppHeader />
+
+        {/* Toast */}
+        <Toaster position="top-right" reverseOrder={false} /> 
+
         {/* Page Content */}
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">{children}</div>
       </div>

@@ -1,30 +1,31 @@
-// middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('accessToken')?.value;
+  const role = request.cookies.get('userRole')?.value;
   const { pathname } = request.nextUrl;
 
-  // Kalau sudah login, jangan boleh buka /auth/signin atau /auth/signup lagi
-  if (token && (pathname.startsWith('/auth/signin') || pathname.startsWith('/auth/signup'))) {
-    return NextResponse.redirect(new URL('/admin', request.url));
-  }
-
-  // Allow akses ke /auth, /api, /_next
-  if (pathname.startsWith('/auth') || pathname.startsWith('/api') || pathname.startsWith('/_next') || pathname.startsWith('/favicon.ico')) {
-    return NextResponse.next();
-  }
-
-  // Kalau belum login dan mau buka halaman lain ➔ Redirect ke login
-  if (!token) {
+  // Kalau belum login dan buka halaman selain /auth -> redirect ke /auth/signin
+  if (!token && !pathname.startsWith('/auth')) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
+
+  // Kalau sudah login dan buka / atau /auth/signin, redirect ke dashboard
+  if (token && (pathname === '/' || pathname === '/auth/signin')) {
+    return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+  }
+
+  // Kalau user role HR tapi buka /admin -> redirect ke unauthorized
+  if (pathname.startsWith('/admin') && role !== 'admin') {
+    return NextResponse.redirect(new URL('/unauthorized', request.url));
+  }
+
+  // (optional) nanti kalau ada /hr page, bisa ditambah proteksi disini
 
   return NextResponse.next();
 }
 
-// Untuk semua routes kecuali _next, favicon, dll
 export const config = {
-  matcher: ['/((?!_next|favicon.ico).*)'],
+  matcher: ['/((?!_next|favicon.ico|api|_static).*)'],
 };

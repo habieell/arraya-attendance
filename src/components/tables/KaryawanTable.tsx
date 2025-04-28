@@ -1,7 +1,9 @@
-  "use client";
+"use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Cookies from "js-cookie";
+
 import {
   Table,
   TableBody,
@@ -192,12 +194,54 @@ const usersData: UserDetail[] = [
   },
 ];
 
-
 export default function UserTable() {
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
+  const [role, setRole] = useState<string | undefined>();
+
+  useEffect(() => {
+    const userRole = Cookies.get('userRole');
+    setRole(userRole);
+  }, []);
+
+  const handleAdd = () => {
+    alert("Tambah karyawan (fitur ini perlu dibuat)");
+  };
+
+  const handleEdit = () => {
+    alert("Edit karyawan (fitur ini perlu dibuat)");
+  };
+
+  const handleDelete = () => {
+    alert("Hapus karyawan (fitur ini perlu dibuat)");
+  };
 
   return (
     <>
+      {/* Tombol CRUD hanya untuk Admin */}
+      {role === 'admin' && (
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={handleAdd}
+            className="px-4 py-2 bg-green-600 text-white rounded"
+          >
+            Tambah Karyawan
+          </button>
+          <button
+            onClick={handleEdit}
+            className="px-4 py-2 bg-yellow-500 text-white rounded"
+          >
+            Edit Karyawan
+          </button>
+          <button
+            onClick={handleDelete}
+            className="px-4 py-2 bg-red-600 text-white rounded"
+          >
+            Hapus Karyawan
+          </button>
+        </div>
+      )}
+
+      {/* Table Karyawan */}
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1000px]">
@@ -265,6 +309,7 @@ export default function UserTable() {
         </div>
       </div>
 
+      {/* Modal Detail Karyawan */}
       <UserDetailModal
         isOpen={selectedUser !== null}
         onClose={() => setSelectedUser(null)}
