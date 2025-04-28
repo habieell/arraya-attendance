@@ -88,7 +88,7 @@ const AppHeader: React.FC = () => {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M6 10.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm12 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 10.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
-                fill="currentColor"
+                fill="currentColor" 
               />
             </svg>
           </button>
