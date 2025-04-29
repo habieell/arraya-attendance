@@ -284,26 +284,25 @@ export default function UserTable() {
                     </TableCell>
                     <TableCell className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
                       <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          className="bg-blue-800 text-white"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEdit(user);
-                          }}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="bg-red-600 text-white"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(user);
-                          }}
-                        >
-                          Hapus
-                        </Button>
+                        <TableCell className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              className="bg-blue-800 text-white"
+                              onClick={() => handleEdit(user)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="bg-red-600 text-white"
+                              onClick={() => handleDelete(user)}
+                            >
+                              Hapus
+                            </Button>
+                          </div>
+                        </TableCell>
+
                       </div>
                     </TableCell>
                   </TableRow>

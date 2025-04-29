@@ -252,17 +252,14 @@ export default function PerizinanTable() {
     toast.success("Data berhasil diekspor!");
   };
 
-  const handleApprove = (e: React.MouseEvent, user: UserPermission, permission: Permission) => {
-    e.stopPropagation();
-    toast.success(`Izin ${permission.type} oleh ${user.name} telah Disetujui!`);
-    // Logic update status "Disetujui" bisa dibuat disini kalau dynamic
+  const handleApprove = (user: UserPermission, permission: Permission) => {
+    toast.success(`Disetujui: ${permission.type} oleh ${user.name}`);
   };
-
-  const handleReject = (e: React.MouseEvent, user: UserPermission, permission: Permission) => {
-    e.stopPropagation();
-    toast.error(`Izin ${permission.type} oleh ${user.name} telah Ditolak!`);
-    // Logic update status "Ditolak" bisa dibuat disini kalau dynamic
+  
+  const handleReject = (user: UserPermission, permission: Permission) => {
+    toast.error(`Ditolak: ${permission.type} oleh ${user.name}`);
   };
+  
 
   return (
     <>
@@ -324,14 +321,14 @@ export default function PerizinanTable() {
                             <Button
                               size="sm"
                               className="bg-green-500 text-white"
-                              onClick={(e) => handleApprove(e, user, p)}
+                              onClick={() => handleApprove(user, p)}
                             >
                               Approve
                             </Button>
                             <Button
                               size="sm"
                               className="bg-red-500 text-white"
-                              onClick={(e) => handleReject(e, user, p)}
+                              onClick={() => handleReject(user, p)}
                             >
                               Tolak
                             </Button>
