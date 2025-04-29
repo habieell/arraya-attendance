@@ -7,6 +7,7 @@ import PerizinanDetailModal from "../example/ModalExample/PerizinanDetailModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { toast } from "react-hot-toast";
+import Button from "@/components/ui/button/Button"; // Import button kamu
 
 interface Permission {
   date: string;
@@ -26,7 +27,6 @@ interface UserPermission {
   permissions: Permission[];
 }
 
-// Dummy data permissions
 const permissionData: UserPermission[] = [
   {
     id: 1,
@@ -252,21 +252,31 @@ export default function PerizinanTable() {
     toast.success("Data berhasil diekspor!");
   };
 
+  const handleApprove = (e: React.MouseEvent, user: UserPermission, permission: Permission) => {
+    e.stopPropagation();
+    toast.success(`Izin ${permission.type} oleh ${user.name} telah Disetujui!`);
+    // Logic update status "Disetujui" bisa dibuat disini kalau dynamic
+  };
+
+  const handleReject = (e: React.MouseEvent, user: UserPermission, permission: Permission) => {
+    e.stopPropagation();
+    toast.error(`Izin ${permission.type} oleh ${user.name} telah Ditolak!`);
+    // Logic update status "Ditolak" bisa dibuat disini kalau dynamic
+  };
+
   return (
     <>
-      {/* Tombol Export khusus HR */}
       {role === "hr" && (
         <div className="flex justify-end mb-4">
-          <button
+          <Button
             onClick={handleExport}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
             Export Data Perizinan
-          </button>
+          </Button>
         </div>
       )}
 
-      {/* Tabel Data */}
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="w-full overflow-x-auto">
           <div className="min-w-[1100px]">
@@ -274,12 +284,12 @@ export default function PerizinanTable() {
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Nama</TableCell>
-                  <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Email</TableCell>
                   <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Departemen</TableCell>
                   <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Jenis Izin</TableCell>
                   <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Alasan</TableCell>
                   <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Status</TableCell>
                   <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Pengajuan</TableCell>
+                  <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Action</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
@@ -291,7 +301,6 @@ export default function PerizinanTable() {
                       onClick={() => setSelectedPermission({ user, permission: p })}
                     >
                       <TableCell className="px-5 py-4 text-sm text-gray-800 dark:text-white/90">{user.name}</TableCell>
-                      <TableCell className="px-5 py-4 text-sm text-gray-500 dark:text-gray-400">{user.email}</TableCell>
                       <TableCell className="px-5 py-4 text-sm text-gray-500 dark:text-gray-400">{user.department}</TableCell>
                       <TableCell className="px-5 py-4 text-sm text-gray-600 dark:text-gray-300">{p.type}</TableCell>
                       <TableCell className="px-5 py-4 text-sm text-gray-600 dark:text-gray-300">{p.reason}</TableCell>
@@ -309,6 +318,26 @@ export default function PerizinanTable() {
                         </span>
                       </TableCell>
                       <TableCell className="px-5 py-4 text-sm text-gray-600 dark:text-gray-300">{p.date}</TableCell>
+                      <TableCell className="px-5 py-4 text-sm">
+                        {p.status === "Menunggu" && (
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              className="bg-green-500 text-white"
+                              onClick={(e) => handleApprove(e, user, p)}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="bg-red-500 text-white"
+                              onClick={(e) => handleReject(e, user, p)}
+                            >
+                              Tolak
+                            </Button>
+                          </div>
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
@@ -318,7 +347,6 @@ export default function PerizinanTable() {
         </div>
       </div>
 
-      {/* Modal Detail */}
       {selectedPermission && (
         <PerizinanDetailModal
           isOpen={true}

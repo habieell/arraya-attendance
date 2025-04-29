@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Cookies from "js-cookie";
+import { toast } from "react-hot-toast";
+import Button from "@/components/ui/button/Button";
 
 import {
   Table,
@@ -204,40 +206,28 @@ export default function UserTable() {
   }, []);
 
   const handleAdd = () => {
-    alert("Tambah karyawan (fitur ini perlu dibuat)");
+    toast.success("Fitur tambah karyawan akan segera dibuat!");
   };
 
-  const handleEdit = () => {
-    alert("Edit karyawan (fitur ini perlu dibuat)");
+  const handleEdit = (user: UserDetail) => {
+    toast.success(`Edit data ${user.name}`);
   };
 
-  const handleDelete = () => {
-    alert("Hapus karyawan (fitur ini perlu dibuat)");
+  const handleDelete = (user: UserDetail) => {
+    toast.error(`Hapus data ${user.name}`);
   };
 
   return (
     <>
       {/* Tombol CRUD hanya untuk Admin */}
       {role === 'admin' && (
-        <div className="flex gap-4 mb-6">
-          <button
+        <div className="flex -mt-4 mr-8 justify-end">
+          <Button
             onClick={handleAdd}
-            className="px-4 py-2 bg-green-600 text-white rounded"
+            className="py-1 bg-green-600 text-white rounded"
           >
-            Tambah Karyawan
-          </button>
-          <button
-            onClick={handleEdit}
-            className="px-4 py-2 bg-yellow-500 text-white rounded"
-          >
-            Edit Karyawan
-          </button>
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 text-white rounded"
-          >
-            Hapus Karyawan
-          </button>
+            +
+          </Button>
         </div>
       )}
 
@@ -248,21 +238,12 @@ export default function UserTable() {
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Nama
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Email
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Role
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Nomor Telepon
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Perusahaan
-                  </TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">Nama</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">Email</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">Role</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">Nomor Telepon</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">Perusahaan</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">Action</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
@@ -300,6 +281,30 @@ export default function UserTable() {
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-sm dark:text-gray-400">
                       {user.company}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          className="bg-blue-800 text-white"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(user);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="bg-red-600 text-white"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(user);
+                          }}
+                        >
+                          Hapus
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

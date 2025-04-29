@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import { EcommerceMetrics } from "@/components/dashboard/EcommerceMetrics";
+import { AbsenMeter } from "@/components/dashboard/AbsenMeter";
 import React from "react";
-// import MonthlyTarget from "@/components/dashboard/MonthlyTarget";
-// import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
-// import StatisticsChart from "@/components/dashboard/StatisticsChart";
-import RecentOrders from "@/components/dashboard/RecentOrders";
-// import DemographicCard from "@/components/ecommerce/DemographicCard";
+import AbsenHarian from "@/components/dashboard/AbsenHarian";
 
 export const metadata: Metadata = {
   title:
@@ -17,29 +13,12 @@ export default function Ecommerce() {
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       {/* Buat EcommerceMetrics mengambil lebar penuh */}
       <div className="col-span-12">
-        <EcommerceMetrics />
-      </div>
-
-      {/* Sisanya tetap seperti sebelumnya */}
-      <div className="col-span-12 xl:col-span-7 space-y-6">
-        {/* <MonthlySalesChart /> */}
-      </div>
-
-      <div className="col-span-12 xl:col-span-5">
-        {/* <MonthlyTarget /> */}
+        <AbsenMeter />
       </div>
 
       <div className="col-span-12">
-        <RecentOrders />
+        <AbsenHarian />
       </div>
-
-      {/* <div className="col-span-12">
-        <StatisticsChart />
-      </div> */}
-
-      {/* <div className="col-span-12 xl:col-span-5">
-        <DemographicCard />
-      </div> */}
     </div>
   );
 }
