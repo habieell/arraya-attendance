@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
-import PerizinanDetailModal from "../example/ModalExample/PerizinanDetailModal";
+import PerizinanDetailModal from "../modal/PerizinanDetailModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { toast } from "react-hot-toast";

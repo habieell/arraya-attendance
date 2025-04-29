@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import UserDetailModal from "../example/ModalExample/UserDetailModal";
+import UserDetailModal from "../modal/UserDetailModal";
 
 interface Attendance {
   date: string;
