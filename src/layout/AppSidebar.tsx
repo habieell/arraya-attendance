@@ -38,15 +38,29 @@ const navItems: NavItem[] = [
   // },
   
   {
-    name: "Data Tabel",
+    name: "Organisasi",
     icon: <TableIcon />,
     subItems: [
+      { name: "Users", path: "/tabel-users", pro: false },
+      { name: "Role", path: "/tabel-role", pro: false },
       { name: "Karyawan", path: "/tabel-karyawan", pro: false },
-      { name: "Perizinan", path: "/tabel-perizinan", pro: false}
-
+      { name: "Perusahaan", path: "/tabel-perizinan", pro: false},
+      { name: "Cabang Perusahaan", path: "/tabel-perizinan", pro: false},
+      { name: "Department", path: "/tabel-perizinan", pro: false},
+      { name: "Job Posisi", path: "/tabel-perizinan", pro: false},
+      { name: "Shift Kerja", path: "/tabel-perizinan", pro: false}
     ],
   },
-
+  {
+    name: "Absensi",
+    icon: <TableIcon />,
+    subItems: [
+      { name: "Tipe Perizinan", path: "/tabel-karyawan", pro: false },
+      { name: "Perizinan", path: "/tabel-perizinan", pro: false},
+      { name: "Absensi", path: "/tabel-perizinan", pro: false},
+      { name: "History Approve", path: "/tabel-perizinan", pro: false}
+    ],
+  },
   {
     icon: <UserCircleIcon />,
     name: "User Profile",

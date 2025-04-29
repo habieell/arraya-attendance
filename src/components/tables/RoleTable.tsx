@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Cookies from "js-cookie";
+import { useModal } from "@/hooks/useModal";
+import { Modal } from "@/components/ui/modal/Modal";
+import { CreateButton } from "@/components/ui/button/ButtonCreate";
+import  FormUsers  from "@/components/form/create/FormUsers";
 
 import {
   Table,
@@ -194,9 +198,10 @@ const usersData: UserDetail[] = [
   },
 ];
 
-export default function KaryawanTable() {
+export default function UserTable() {
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [role, setRole] = useState<string | undefined>();
+  const { isOpen, openModal, closeModal } = useModal();
 
   useEffect(() => {
     const userRole = Cookies.get('userRole');
@@ -240,7 +245,12 @@ export default function KaryawanTable() {
           </button>
         </div>
       )}
-
+      <div className="text-end">
+      <CreateButton onClick={openModal} />
+      </div> 
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        <FormUsers />
+      </Modal>
       {/* Table Karyawan */}
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
@@ -252,16 +262,7 @@ export default function KaryawanTable() {
                     Nama
                   </TableCell>
                   <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Email
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Role
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Nomor Telepon
-                  </TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-sm dark:text-gray-400">
-                    Perusahaan
+                    SlugName
                   </TableCell>
                 </TableRow>
               </TableHeader>
