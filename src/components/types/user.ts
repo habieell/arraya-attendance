@@ -1,7 +1,15 @@
 // /types/user.ts
 
-export interface Role {
+export interface User {
+    id: number;
     name: string;
-    slugName: string;
+    email: string;
+    password: string;
+    roleId: string;
+    companyid:string;
+    branchId: null|string;
+    departmentId: string;
+    positionId: string;
+
   }
   
