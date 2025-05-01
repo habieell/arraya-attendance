@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {useUsers} from '@/hooks/useUsers';
+import { useUsers } from '@/hooks/useUsers';
 import Input from '../input/InputField';
 import Form from '../Form';
 import ComponentCard from '../../common/ComponentCard';
@@ -13,14 +13,10 @@ import { User } from '@/components/types/user';
 import { UserProfile } from '@/components/types/userProfile';
 
 export default function FormUsers() {
-  const { users, loading, error } = useUsers();
+  const { users, loading, error, createUser } = useUsers(); // pastikan createUser diambil dari sini
   const [showPassword, setShowPassword] = useState(false);
-  const { createUser } = useUsers();
 
-
-  const [formData, setFormData] = useState<Partial<User & UserProfile>>({
-  
-  });
+  const [formData, setFormData] = useState<Partial<User & UserProfile>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,25 +31,27 @@ export default function FormUsers() {
     e.preventDefault();
     console.log('Form submitted:', formData);
 
-    // Validasi formData sebelum dipanggil
     if (!formData.name || !formData.email) {
       console.error('Name and email are required');
       return;
     }
 
     try {
-      await createUser(formData as Omit<User, 'id'>); // Cast ke Omit<User, 'id'>
-      setFormData({ name: '', email: '', gender: null });
+      await createUser(formData as Omit<User, 'id'>);
+      setFormData({});
     } catch (err) {
       console.error('Failed to create user:', err);
     }
   };
 
+  const isUserArray = Array.isArray(users);
 
-  const userOptions = users.map(user => ({
-    value: String(user.id),
-    label: user.name,
-  }));
+  const userOptions = isUserArray
+    ? users.map((user) => ({
+        value: String(user.id),
+        label: user.name,
+      }))
+    : [];
 
   const genderOptions = [
     { value: 'male', label: 'Male' },
@@ -113,7 +111,7 @@ export default function FormUsers() {
             </div>
           </div>
 
-          {/* Role ID */}
+          {/* Role */}
           <div>
             <Label>Role</Label>
             <Select
@@ -123,7 +121,7 @@ export default function FormUsers() {
             />
           </div>
 
-          {/* Company ID */}
+          {/* Company */}
           <div>
             <Label>Company</Label>
             <Select
@@ -133,7 +131,7 @@ export default function FormUsers() {
             />
           </div>
 
-          {/* Branch ID */}
+          {/* Branch */}
           <div>
             <Label>Branch</Label>
             <Select
@@ -143,7 +141,7 @@ export default function FormUsers() {
             />
           </div>
 
-          {/* Department ID */}
+          {/* Department */}
           <div>
             <Label>Department</Label>
             <Select
@@ -153,7 +151,7 @@ export default function FormUsers() {
             />
           </div>
 
-          {/* Position ID */}
+          {/* Position */}
           <div>
             <Label>Position</Label>
             <Select

@@ -43,8 +43,6 @@ export default function SignInForm() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              {/* Social buttons */}
-              {/* ... (unchanged) */}
             </div>
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
@@ -57,7 +55,6 @@ export default function SignInForm() {
               </div>
             </div>
 
-            {/* FORM START */}
             <form onSubmit={handleSubmit}>
               <div className="space-y-6">
                 <div>

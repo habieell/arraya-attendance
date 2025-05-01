@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { User } from '../components/types/user';
 import AxiosInstance from '@/lib/axios';
+import { parseCookies } from 'nookies';
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,7 +15,19 @@ export function useUsers() {
 
   const fetchUsers = async () => {
     try {
-      const res = await AxiosInstance.get<User[]>('/v1/user');
+      const cookies = parseCookies();
+      const token = cookies.accessToken;
+      if (!token) {
+        setError('Tidak ada token ditemukan');
+        return;
+      }
+  
+      const res = await AxiosInstance.get<User[]>('/v1/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+  
       setUsers(res.data);
     } catch (err) {
       setError(err);
