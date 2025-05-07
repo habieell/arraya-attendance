@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useUsers } from '@/hooks/useUsers';
+import  useUsersAction  from '@/hooks/users/useUsersAction';
+import  {useUsers}  from '@/hooks/users/useUsers';
 import Input from '../input/InputField';
 import Form from '../Form';
 import ComponentCard from '../../common/ComponentCard';
@@ -13,7 +14,8 @@ import { User } from '@/components/types/user';
 import { UserProfile } from '@/components/types/userProfile';
 
 export default function FormUsers() {
-  const { users, loading, error, createUser } = useUsers(); // pastikan createUser diambil dari sini
+  const { createUser } =  useUsersAction(); // pastikan createUser diambil dari sini
+  const { loading,error, users } =  useUsers();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState<Partial<User & UserProfile>>({});
