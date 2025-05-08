@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal/Modal";
 import { CreateButton } from "@/components/ui/button/ButtonCreate";
-import FormUsers from "@/components/form/create/FormUsers";
+import FormUsers from "@/components/form/admin/FormUsers";
 import {
   Table,
   TableBody,

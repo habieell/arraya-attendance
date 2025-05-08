@@ -46,8 +46,8 @@ const navItems: NavItem[] = [
       { name: "Karyawan", path: "/admin/tabel-karyawan", pro: false },
       { name: "Perusahaan", path: "/admin/tabel-perusahaan", pro: false},
       { name: "Cabang Perusahaan", path: "/admin/tabel-perizinan", pro: false},
-      { name: "Department", path: "/admin/tabel-perizinan", pro: false},
-      { name: "Job Posisi", path: "/admin/tabel-perizinan", pro: false},
+      { name: "Department", path: "/admin/tabel-department", pro: false},
+      { name: "Job Posisi", path: "/admin/tabel-posisi", pro: false},
       { name: "Shift Kerja", path: "/admin/tabel-perizinan", pro: false}
     ],
   },

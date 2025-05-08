@@ -3,19 +3,19 @@ import React, { useState, useEffect } from "react";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal/Modal";
 import { CreateButton } from "@/components/ui/button/ButtonCreate";
-import FormCompany from "@/components/form/admin/FormCompany";
+import FormPosition from "@/components/form/admin/FormPosition";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
-import { useCompany } from "@/hooks/company/useCompany";
-import { Company } from "@/components/types/company";
+import { usePosition } from "@/hooks/position/usePosition";
+import { Position } from "@/components/types/position";
 import { Pencil, Trash2 } from "lucide-react";
 import { ConfirmationModal } from "../ui/modal/ConfirmationModal";
-import useCompanyAction from '@/hooks/company/useCompanyAction';
+import usePositionAction from '@/hooks/position/usePositionAction';
 
-export default function CompanyTable() {
-    const { deleteCompany, updateCompany } = useCompanyAction();
-    const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+export default function DepartmentTable() {
+    const { deletePosition } = usePositionAction();
+    const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
     const { isOpen, openModal, closeModal } = useModal();
-    const { company, loading, error, refetch } = useCompany();
+    const { position, loading, error, refetch } = usePosition();
     const [showConfirm, setShowConfirm] = useState(false);
 
     if (loading) return <p>Loading...</p>;
@@ -30,15 +30,24 @@ export default function CompanyTable() {
                 isOpen={isOpen}
                 onClose={() => {
                     closeModal();
-                    setSelectedCompany(null);
+                    setSelectedPosition(null);
                 }}
             >
-                <FormCompany
-                    company={selectedCompany}
+                <FormPosition
+                    position={
+                        selectedPosition
+                            ? {
+                                id: selectedPosition.id,
+                                name: selectedPosition.name,
+                                department_id: selectedPosition.department?.id ? String(selectedPosition.department.id) : '',
+                                level: selectedPosition.level,
+                            }
+                            : null
+                    }
                     onSuccess={() => {
                         refetch();
                         closeModal();
-                        setSelectedCompany(null);
+                        setSelectedPosition(null);
                     }}
                 />
             </Modal>
@@ -50,28 +59,28 @@ export default function CompanyTable() {
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] bg-gray-50 dark:bg-white/[0.02]">
                                 <TableRow>
                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Nama</TableCell>
-                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Alamat</TableCell>
-                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Contact</TableCell>
+                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Department</TableCell>
+                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Level</TableCell>
                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Aksi</TableCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                                {Array.isArray(company) && company.length > 0 ? (
-                                    company.map((company) => (
+                                {Array.isArray(position) && position.length > 0 ? (
+                                    position.map((position) => (
                                         <TableRow
-                                            key={company.id}
+                                            key={position.id}
                                             className="hover:bg-gray-50 dark:hover:bg-white/[0.05] cursor-pointer"
-                                            onClick={() => setSelectedCompany(company)}
+                                            onClick={() => setSelectedPosition(position)}
                                         >
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{company.name}</TableCell>
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{company.address ?? "-"}</TableCell>
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{company.contact ?? "-"}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.name}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.department?.name ?? "-"}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.level}</TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            setSelectedCompany(company);
+                                                            setSelectedPosition(position);
                                                             openModal();
                                                         }}
                                                         className="text-blue-600 hover:text-blue-800"
@@ -81,7 +90,7 @@ export default function CompanyTable() {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            setSelectedCompany(company);
+                                                            setSelectedPosition(position);
                                                             setShowConfirm(true);
                                                         }}
                                                         className="text-red-600 hover:text-red-800"
@@ -95,7 +104,7 @@ export default function CompanyTable() {
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={4} className="text-center py-4 text-gray-500">
-                                            Data Perusahaan tidak tersedia.
+                                            Data department tidak tersedia.
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -108,19 +117,19 @@ export default function CompanyTable() {
                 isOpen={showConfirm}
                 onClose={() => {
                     setShowConfirm(false);
-                    setSelectedCompany(null);
+                    setSelectedPosition(null);
                 }}
                 onConfirm={() => {
-                    if (selectedCompany?.id) {
-                        deleteCompany(selectedCompany.id, () => {
+                    if (selectedPosition?.id) {
+                        deletePosition(selectedPosition.id, () => {
                             refetch();
                         });
                     }
                     setShowConfirm(false);
-                    setSelectedCompany(null);
+                    setSelectedPosition(null);
                 }}
                 title="Hapus data ini?"
-                description={`Perusahaan "${selectedCompany?.name}" akan dihapus secara permanen.`}
+                description={`Posisi "${selectedPosition?.name}" akan dihapus secara permanen.`}
                 confirmText="Hapus"
                 cancelText="Batal"
             />

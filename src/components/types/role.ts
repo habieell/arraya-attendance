@@ -1,7 +1,6 @@
-// /types/user.ts
 
 export interface Role {
-    name: string;
-    slugName: string;
-  }
-  
+  id: number;
+  name: string;
+  slug_name: string;
+}

@@ -42,7 +42,6 @@ export default function AdminLayout({
     <div className="min-h-screen xl:flex">
       <AppSidebar />
       <Backdrop />
-
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
       >

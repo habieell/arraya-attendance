@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { Company } from '../../components/types/company';
+import { DepartmentCreate } from '../../components/types/department';
 import AxiosInstance from '@/lib/axios';
 import { parseCookies } from 'nookies';
 import { toast } from 'react-hot-toast';
 
 
-export default function useCompanyAction() {
+export default function useDepartmentAction() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<any>(null);
 
-    const createCompany = async (
-        companyData: Omit<Company, 'id'>,
+    const createDepartment = async (
+        departmentData: Omit<DepartmentCreate, 'id'>,
         onSuccess?: () => void
     ) => {
         try {
@@ -19,12 +19,13 @@ export default function useCompanyAction() {
             const token = cookies.accessToken;
             if (!token) throw new Error('Tidak ada token ditemukan');
 
-            await AxiosInstance.post<Company>('/v1/company', companyData, {
+            await AxiosInstance.post<DepartmentCreate>('/v1/department', departmentData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
+            toast.success('Department berhasil ditambahkan')
             onSuccess?.();
         } catch (err) {
+            toast.error('Department Gagal ditambahkan');
             setError(err);
         } finally {
             setLoading(false);
@@ -32,9 +33,9 @@ export default function useCompanyAction() {
     };
 
 
-    const updateCompany = async (
+    const updateDepartment = async (
         id: number,
-        updatedData: Partial<Company>,
+        updatedData: Partial<DepartmentCreate>,
         onSuccess?: () => void
     ) => {
         try {
@@ -43,38 +44,39 @@ export default function useCompanyAction() {
             const token = cookies.accessToken;
             if (!token) throw new Error('Tidak ada token ditemukan');
 
-            await AxiosInstance.put<Company>(`/v1/company/${id}`, updatedData, {
+            await AxiosInstance.put<DepartmentCreate>(`/v1/department/${id}`, updatedData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
+            toast.success('Department berhasil diperbarui');
             onSuccess?.();
         } catch (err) {
+            toast.error('Department Gagal diperbarui');
             setError(err);
         } finally {
             setLoading(false);
         }
     };
 
-    const deleteCompany = async (id: number, onSuccess?: () => void) => {
+    const deleteDepartment = async (id: number, onSuccess?: () => void) => {
         try {
             setLoading(true);
             const cookies = parseCookies();
             const token = cookies.accessToken;
             if (!token) throw new Error('Tidak ada token ditemukan');
 
-            await AxiosInstance.delete(`/v1/company/${id}`, {
+            await AxiosInstance.delete(`/v1/department/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            toast.success('Perusahaan berhasil dihapus');
+            toast.success('Department berhasil dihapus');
             onSuccess?.();
         } catch (err) {
-            toast.error('Perusahaan Gagal dihapus');
+            toast.error('Department Gagal dihapus');
             setError(err);
         } finally {
             setLoading(false);
         }
     };
 
-    return { createCompany, updateCompany, deleteCompany, loading, error };
+    return { createDepartment, updateDepartment, deleteDepartment, loading, error };
 }
