@@ -4,13 +4,14 @@ export interface Shift {
     id: number;
     company: Company;
     name: string;
-    start_time: string;
-    end_time: string;
+    start_time: Date;
+    end_time: Date;
   }
  
   export interface ShiftCreate {
-    id: number;
+    id: number;    
+    company_id: string;
     name: string;
-    department_id: string;
-    level: string;
+    start_time: Date;
+    end_time: Date;
   }

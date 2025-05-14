@@ -1,11 +1,11 @@
 // /types/user.ts
 
 export interface UserProfile {
-    fullName: string;
-    birthDate: string;
-    birthPlace: string;
+    full_name: string;
+    birth_date: string;
+    birth_place: string;
     address: string;
-    phoneNumber:string;
+    phone_number:string;
     gender: null|string;
     photo: string;
   }

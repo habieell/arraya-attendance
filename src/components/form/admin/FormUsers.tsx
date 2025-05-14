@@ -1,262 +1,330 @@
 'use client';
 
-import React, { useState } from 'react';
-import  useUsersAction  from '@/hooks/users/useUsersAction';
-import  {useUsers}  from '@/hooks/users/useUsers';
+import React, { useEffect, useState } from 'react';
 import Input from '../input/InputField';
 import Form from '../Form';
 import ComponentCard from '../../common/ComponentCard';
 import Label from '../Label';
+import useUserAction from '@/hooks/users/useUsersAction';
+import { UserCreate } from '@/components/types/user';
+import { ConfirmationModal } from '../../ui/modal/ConfirmationModal';
 import Select from '../Select';
-import { ChevronDownIcon, EyeCloseIcon, EyeIcon } from '../../../icons';
-import DatePicker from '@/components/form/date-picker';
-import { User } from '@/components/types/user';
-import { UserProfile } from '@/components/types/userProfile';
+import { useCompany } from '@/hooks/company/useCompany';
+import { useRole } from '@/hooks/role/useRole';
+import { useBranch } from '@/hooks/branch/useBranch';
+import { usePosition } from '@/hooks/position/usePosition';
+import { useDepartment } from '@/hooks/department/useDepartment';
+import { toast } from 'react-hot-toast';
+import DatePicker from '../date-picker';
+import { EyeCloseIcon, EyeIcon } from '../../../icons';
+import FileInput from '../input/FileInput';
 
-export default function FormUsers() {
-  const { createUser } =  useUsersAction(); // pastikan createUser diambil dari sini
-  const { loading,error, users } =  useUsers();
-  const [showPassword, setShowPassword] = useState(false);
+interface Props {
+    user?: UserCreate | null;
+    onSuccess?: () => void;
+}
 
-  const [formData, setFormData] = useState<Partial<User & UserProfile>>({});
+export default function FormUser({ user, onSuccess }: Props) {
+    const { createUser, updateUser } = useUserAction();
+    const [formData, setFormData] = useState<Partial<UserCreate>>({});
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const { company } = useCompany();
+    const { role } = useRole();
+    const { branch } = useBranch();
+    const { position } = usePosition();
+    const { department } = useDepartment();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    const isUpdate = !!user;
 
-  const handleSelectChange = (field: keyof (User & UserProfile), value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+    // Populate form on update
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                role_id: user.role_id,
+                company_id: user.company_id,
+                branch_id: user.branch_id,
+                position_id: user.position_id,
+                department_id: user.department_id,
+                birth_date: user.birth_date,
+                birth_place: user.birth_place,
+                address: user.address,
+                phone_number: user.phone_number,
+                gender: user.gender,
+                photo: user.photo,
+            });
+        } else {
+            setFormData({});
+        }
+    }, [user]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
-    if (!formData.name || !formData.email) {
-      console.error('Name and email are required');
-      return;
-    }
+        if (!formData.name || !formData.company_id || !formData.role_id || !formData.position_id || !formData.department_id) {
+            toast.error('Lengkapi semua field sebelum submit.');
+            return;
+        }
 
-    try {
-      await createUser(formData as Omit<User, 'id'>);
-      setFormData({});
-    } catch (err) {
-      console.error('Failed to create user:', err);
-    }
-  };
+        setShowConfirm(true);
+    };
 
-  const isUserArray = Array.isArray(users);
+    const confirmSubmit = async () => {
+        setIsSubmitting(true);
+        try {
+            if (isUpdate && user?.id) {
+                await updateUser(user.id, formData as UserCreate);
+            } else {
+                await createUser(formData as Omit<UserCreate, 'id'>);
+                setFormData({});
+            }
+            onSuccess?.();
+        } catch (err) {
 
-  const userOptions = isUserArray
-    ? users.map((user) => ({
-        value: String(user.id),
-        label: user.name,
-      }))
-    : [];
+        } finally {
+            setIsSubmitting(false);
+            setShowConfirm(false);
+        }
+    };
 
-  const genderOptions = [
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
-  ];
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
-  return (
-    <Form onSubmit={handleSubmit}>
-      <ComponentCard title="Tambah Users">
-        <div className="grid grid-cols-3 gap-4">
-          {/* Name */}
-          <div>
-            <Label>Nama</Label>
-            <Input 
-              type="text" 
-              name="name" 
-              value={formData.name || ''} 
-              onChange={handleChange} 
-              placeholder="Nama lengkap"
+    const handleSelectChange = (field: string, value: string) => {
+        setFormData((prev) => ({ ...prev, [field]: value || undefined }));
+    };
+
+    const handleDateChange = (field: 'birth_date', value: Date) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleTextareaChange = (value: string) => {
+        setFormData((prev) => ({ ...prev, address: value }));
+    };
+
+    const roleOptions = [...(role || []).map((d) => ({ value: String(d.id), label: d.name }))];
+    const companyOptions = [...(company || []).map((d) => ({ value: String(d.id), label: d.name }))];
+    const branchOptions = [{ value: '', label: 'Tidak ada' }, ...(branch || []).map((d) => ({ value: String(d.id), label: d.name }))];
+    const positionOptions = [...(position || []).map((d) => ({ value: String(d.id), label: d.name }))];
+    const departmentOptions = [{ value: '', label: 'Tidak ada' }, ...(department || []).map((d) => ({ value: String(d.id), label: d.name }))];
+    const genderOptions = [
+        { value: '1', label: 'Male' },
+        { value: '0', label: 'Female' },
+    ];
+
+    return (
+        <>
+            <Form onSubmit={handleSubmit}>
+                <ComponentCard title={isUpdate ? 'Update User' : 'Create User'}>
+                    <div className="grid grid-cols-3 gap-4">
+                        <div>
+                            <Label>Name</Label>
+                            <Input
+                                type="text"
+                                name="name"
+                                value={formData.name || ''}
+                                onChange={handleChange}
+                                placeholder="Name"
+                            />
+                        </div>
+                        <div>
+                            <Label>Email</Label>
+                            <Input
+                                type="email"
+                                name="email"
+                                value={formData.email || ''}
+                                onChange={handleChange}
+                                placeholder="Email aktif"
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Password</Label>
+                            <div className="relative">
+                                <Input
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    value={formData.password || ''}
+                                    onChange={handleChange}
+                                    placeholder="Masukkan password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2"
+                                >
+                                    {showPassword ? (
+                                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                                    ) : (
+                                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <Label>Role</Label>
+                            <Select
+                                options={roleOptions}
+                                placeholder="Pilih Role"
+                                value={formData.role_id?.toString() || ''}
+                                onChange={(val) => handleSelectChange('role-id', val)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Perusahaan</Label>
+                            <Select
+                                options={companyOptions}
+                                placeholder="Pilih Perusahaan"
+                                value={formData.company_id?.toString() || ''}
+                                onChange={(val) => handleSelectChange('company_id', val)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Cabang</Label>
+                            <Select
+                                options={branchOptions}
+                                placeholder="Pilih Cabang"
+                                value={formData.branch_id?.toString() || ''}
+                                onChange={(val) => handleSelectChange('branch_id', val)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Job Posisi</Label>
+                            <Select
+                                options={positionOptions}
+                                placeholder="Job Posisi"
+                                value={formData.position_id?.toString() || ''}
+                                onChange={(val) => handleSelectChange('position_id', val)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Department</Label>
+                            <Select
+                                options={departmentOptions}
+                                placeholder="Department"
+                                value={formData.department_id?.toString() || ''}
+                                onChange={(val) => handleSelectChange('department_id', val)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Full Name</Label>
+                            <Input
+                                type="text"
+                                name="fullName"
+                                value={formData.full_name || ''}
+                                onChange={handleChange}
+                                placeholder="Nama lengkap"
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Tempat Lahir</Label>
+                            <Input
+                                type="text"
+                                name="birth_place"
+                                value={formData.birth_place || ''}
+                                onChange={handleChange}
+                                placeholder="Tempat lahir"
+                            />
+                        </div>
+
+                        <DatePicker
+                            id="birth_date"
+                            label="Tanggal Lahir"
+                            mode="time"
+                            placeholder="Select Jam Masuk"
+                            defaultDate={formData.birth_date || ''}
+                            onChange={([time]) => handleDateChange('birth_date', time)}
+                        />
+
+                        <div className="col-span-3">
+                            <Label>Alamat</Label>
+                            <Input
+                                type="text"
+                                name="address"
+                                value={formData.address || ''}
+                                onChange={handleChange}
+                                placeholder="Alamat lengkap"
+                            />
+                        </div>
+
+                        <div>
+                            <Label>No. HP</Label>
+                            <Input
+                                type="text"
+                                name="phoneNumber"
+                                value={formData.phone_number || ''}
+                                onChange={handleChange}
+                                placeholder="08xxxxxxxx"
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Jenis Kelamin</Label>
+                            <Select
+                                options={genderOptions}
+                                placeholder="Pilih gender"
+                                onChange={(val) => handleSelectChange('gender', val)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Photo Profile</Label>
+                            <FileInput
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        const url = URL.createObjectURL(file);
+                                        setFormData((prev) => ({ ...prev, photo: url }));
+                                    }
+                                }}
+                            />
+                            {formData.photo && (
+                                <div className="mt-2">
+                                    <img src={formData.photo} alt="Preview" className="h-20 rounded" />
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
+
+                    <div className="col-span-3 mt-8 max-w-sm text-center">
+                        <button
+                            type="submit"
+                            className="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-700"
+                        >
+                            {isUpdate ? 'Update' : 'Submit'}
+                        </button>
+                    </div>
+                </ComponentCard>
+            </Form >
+
+            <ConfirmationModal
+                isOpen={showConfirm}
+                onClose={() => setShowConfirm(false)}
+                onConfirm={confirmSubmit}
+                title={isUpdate ? 'Update User?' : 'Tambah User?'}
+                description={
+                    isUpdate
+                        ? `User "${formData.name}" akan diperbarui. Apakah Anda yakin?`
+                        : `User baru akan ditambahkan dengan nama "${formData.name}". Lanjutkan?`
+                }
+                confirmText={isUpdate ? 'Update' : 'Submit'}
+                cancelText="Batal"
+                isLoading={isSubmitting}
             />
-          </div>
-
-          {/* Email */}
-          <div>
-            <Label>Email</Label>
-            <Input 
-              type="email" 
-              name="email" 
-              value={formData.email || ''} 
-              onChange={handleChange} 
-              placeholder="Email aktif"
-            />
-          </div>
-
-          {/* Password */}
-          <div>
-            <Label>Password</Label>
-            <div className="relative">
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={formData.password || ''}
-                onChange={handleChange}
-                placeholder="Masukkan password"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2"
-              >
-                {showPassword ? (
-                  <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                ) : (
-                  <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Role */}
-          <div>
-            <Label>Role</Label>
-            <Select
-              options={userOptions}
-              placeholder="Pilih role"
-              onChange={(val) => handleSelectChange('roleId', val)}
-            />
-          </div>
-
-          {/* Company */}
-          <div>
-            <Label>Company</Label>
-            <Select
-              options={userOptions}
-              placeholder="Pilih company"
-              onChange={(val) => handleSelectChange('companyid', val)}
-            />
-          </div>
-
-          {/* Branch */}
-          <div>
-            <Label>Branch</Label>
-            <Select
-              options={userOptions}
-              placeholder="Pilih branch"
-              onChange={(val) => handleSelectChange('branchId', val)}
-            />
-          </div>
-
-          {/* Department */}
-          <div>
-            <Label>Department</Label>
-            <Select
-              options={userOptions}
-              placeholder="Pilih department"
-              onChange={(val) => handleSelectChange('departmentId', val)}
-            />
-          </div>
-
-          {/* Position */}
-          <div>
-            <Label>Position</Label>
-            <Select
-              options={userOptions}
-              placeholder="Pilih position"
-              onChange={(val) => handleSelectChange('positionId', val)}
-            />
-          </div>
-
-          {/* Full Name */}
-          <div>
-            <Label>Full Name</Label>
-            <Input
-              type="text"
-              name="fullName"
-              value={formData.fullName || ''}
-              onChange={handleChange}
-              placeholder="Nama lengkap"
-            />
-          </div>
-
-          {/* Birth Place */}
-          <div>
-            <Label>Birth Place</Label>
-            <Input
-              type="text"
-              name="birthPlace"
-              value={formData.birthPlace || ''}
-              onChange={handleChange}
-              placeholder="Tempat lahir"
-            />
-          </div>
-
-          {/* Birth Date */}
-          <div>
-            <Label>Birth Date</Label>
-            <DatePicker
-              id="birthDate"
-              label=""
-              placeholder="Tanggal lahir"
-              onChange={(dates, dateString) => {
-                handleSelectChange('birthDate', dateString);
-              }}
-            />
-          </div>
-
-          {/* Address */}
-          <div className="col-span-3">
-            <Label>Alamat</Label>
-            <Input
-              type="text"
-              name="address"
-              value={formData.address || ''}
-              onChange={handleChange}
-              placeholder="Alamat lengkap"
-            />
-          </div>
-
-          {/* Phone Number */}
-          <div>
-            <Label>No. HP</Label>
-            <Input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber || ''}
-              onChange={handleChange}
-              placeholder="08xxxxxxxx"
-            />
-          </div>
-
-          {/* Gender */}
-          <div>
-            <Label>Jenis Kelamin</Label>
-            <Select
-              options={genderOptions}
-              placeholder="Pilih gender"
-              onChange={(val) => handleSelectChange('gender', val)}
-            />
-          </div>
-
-          {/* Photo */}
-          <div>
-            <Label>Photo URL</Label>
-            <Input
-              type="text"
-              name="photo"
-              value={formData.photo || ''}
-              onChange={handleChange}
-              placeholder="Link photo profile"
-            />
-          </div>
-        </div>
-
-        {/* Submit Button */}
-        <div className="col-span-3 mt-8 max-w-sm text-center">
-          <button
-            type="submit"
-            className="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-700"
-          >
-            Submit
-          </button>
-        </div>
-      </ComponentCard>
-    </Form>
-  );
+        </>
+    );
 }

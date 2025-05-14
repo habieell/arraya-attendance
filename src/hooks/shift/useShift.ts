@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import { User } from '../../components/types/user';
+import { Shift } from '../../components/types/shift';
 import AxiosInstance from '@/lib/axios';
 import { parseCookies } from 'nookies';
 
-export function useUser() {
-  const [user, setUser] = useState<User[]>([]);
+export function useShift() {
+  const [shift, setShift] = useState<Shift[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    fetchUser();
+    fetchShift();
   }, []);
 
-  const fetchUser = async () => {
+  const fetchShift = async () => {
     setLoading(true);
     try {
       const cookies = parseCookies();
@@ -22,13 +22,13 @@ export function useUser() {
         return;
       }
 
-      const res = await AxiosInstance.get<{ status: number; message: string; data: User[] }>('/v1/user', {
+      const res = await AxiosInstance.get<{ status: number; message: string; data: Shift[] }>('/v1/shift', {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
 
-      setUser(res.data.data);
+      setShift(res.data.data);
     } catch (err) {
       setError(err);
     } finally {
@@ -39,5 +39,5 @@ export function useUser() {
 
 
 
-  return { user, loading, error,  refetch: fetchUser};
+  return { shift, loading, error,  refetch: fetchShift};
 }

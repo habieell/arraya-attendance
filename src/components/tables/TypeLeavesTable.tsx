@@ -1,21 +1,21 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal/Modal";
 import { CreateButton } from "@/components/ui/button/ButtonCreate";
-import FormDepartment from "@/components/form/admin/FormDepartment";
+import FormTypeLeaves from "@/components/form/admin/FormTypeLeave";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
-import { useDepartment } from "@/hooks/department/useDepartment";
-import { Department } from "@/components/types/department";
+import { useTypeLeaves } from "@/hooks/typeLeaves/useTypeLeaves";
+import { TypeLeaves } from "@/components/types/typeLeaves";
 import { Pencil, Trash2 } from "lucide-react";
 import { ConfirmationModal } from "../ui/modal/ConfirmationModal";
-import useDepartmentAction from '@/hooks/department/useDepartmentAction';
+import useTypeLeavesAction from '@/hooks/typeLeaves/useTypeLeavesAction';
 
-export default function DepartmentTable() {
-    const { deleteDepartment } = useDepartmentAction();
-    const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
+export default function TypeLeavesTable() {
+    const { deleteTypeLeaves } = useTypeLeavesAction();
+    const [selectedTypeLeaves, setSelectedTypeLeaves] = useState<TypeLeaves | null>(null);
     const { isOpen, openModal, closeModal } = useModal();
-    const { department, loading, error, refetch } = useDepartment();
+    const { typeLeaves, loading, error, refetch } = useTypeLeaves();
     const [showConfirm, setShowConfirm] = useState(false);
 
     if (loading) return <p>Loading...</p>;
@@ -30,25 +30,23 @@ export default function DepartmentTable() {
                 isOpen={isOpen}
                 onClose={() => {
                     closeModal();
-                    setSelectedDepartment(null);
+                    setSelectedTypeLeaves(null);
                 }}
             >
-                <FormDepartment
-                    department={
-                        selectedDepartment
+                <FormTypeLeaves
+                    typeLeaves={
+                        selectedTypeLeaves
                             ? {
-                                id: selectedDepartment.id,
-                                name: selectedDepartment.name,
-                                company_id: selectedDepartment.company?.id ? String(selectedDepartment.company.id) : '',
-                                branch_id: selectedDepartment.branch?.id ? String(selectedDepartment.branch.id) : '',
-                                director_id: selectedDepartment.director?.id ? String(selectedDepartment.director.id) : '',
+                                id: selectedTypeLeaves.id,
+                                code: selectedTypeLeaves.code,
+                                name: selectedTypeLeaves.name,
                             }
                             : null
                     }
                     onSuccess={() => {
                         refetch();
                         closeModal();
-                        setSelectedDepartment(null);
+                        setSelectedTypeLeaves(null);
                     }}
                 />
             </Modal>
@@ -59,29 +57,27 @@ export default function DepartmentTable() {
                         <Table>
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] bg-gray-50 dark:bg-white/[0.02]">
                                 <TableRow>
-                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Nama</TableCell>
-                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Perusahaan</TableCell>
-                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Direktur</TableCell>
+                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Code</TableCell>
+                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Name</TableCell>
                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Aksi</TableCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                                {Array.isArray(department) && department.length > 0 ? (
-                                    department.map((department) => (
+                                {Array.isArray(typeLeaves) && typeLeaves.length > 0 ? (
+                                    typeLeaves.map((typeLeaves) => (
                                         <TableRow
-                                            key={department.id}
+                                            key={typeLeaves.id}
                                             className="hover:bg-gray-50 dark:hover:bg-white/[0.05] cursor-pointer"
-                                            onClick={() => setSelectedDepartment(department)}
+                                            onClick={() => setSelectedTypeLeaves(typeLeaves)}
                                         >
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{department.name}</TableCell>
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{department.company?.name ?? "-"}</TableCell>
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{department.director?.name ?? "-"}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{typeLeaves.code}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{typeLeaves.name ?? "-"}</TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            setSelectedDepartment(department);
+                                                            setSelectedTypeLeaves(typeLeaves);
                                                             openModal();
                                                         }}
                                                         className="text-blue-600 hover:text-blue-800"
@@ -91,7 +87,7 @@ export default function DepartmentTable() {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            setSelectedDepartment(department);
+                                                            setSelectedTypeLeaves(typeLeaves);
                                                             setShowConfirm(true);
                                                         }}
                                                         className="text-red-600 hover:text-red-800"
@@ -105,7 +101,7 @@ export default function DepartmentTable() {
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={4} className="text-center py-4 text-gray-500">
-                                            Data department tidak tersedia.
+                                            Data Type Leaves tidak tersedia.
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -118,19 +114,19 @@ export default function DepartmentTable() {
                 isOpen={showConfirm}
                 onClose={() => {
                     setShowConfirm(false);
-                    setSelectedDepartment(null);
+                    setSelectedTypeLeaves(null);
                 }}
                 onConfirm={() => {
-                    if (selectedDepartment?.id) {
-                        deleteDepartment(selectedDepartment.id, () => {
+                    if (selectedTypeLeaves?.id) {
+                        deleteTypeLeaves(selectedTypeLeaves.id, () => {
                             refetch();
                         });
                     }
                     setShowConfirm(false);
-                    setSelectedDepartment(null);
+                    setSelectedTypeLeaves(null);
                 }}
                 title="Hapus data ini?"
-                description={`department "${selectedDepartment?.name}" akan dihapus secara permanen.`}
+                description={`Type Leaves "${selectedTypeLeaves?.name}" akan dihapus secara permanen.`}
                 confirmText="Hapus"
                 cancelText="Batal"
             />

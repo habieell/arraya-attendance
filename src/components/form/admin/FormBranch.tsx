@@ -5,45 +5,41 @@ import Input from '../input/InputField';
 import Form from '../Form';
 import ComponentCard from '../../common/ComponentCard';
 import Label from '../Label';
-import useDepartmentAction from '@/hooks/department/useDepartmentAction';
-import { DepartmentCreate } from '@/components/types/department';
+import useBranchAction from '@/hooks/branch/useBranchAction';
+import { BranchCreate } from '@/components/types/branch';
 import { ConfirmationModal } from '../../ui/modal/ConfirmationModal';
 import Select from '../Select';
 import { useCompany } from '@/hooks/company/useCompany';
-import { useBranch } from '@/hooks/branch/useBranch';
-import { useUser } from '@/hooks/users/useUsers';
 import { toast } from 'react-hot-toast';
+import TextArea from '../input/TextArea';
 
 interface Props {
-    department?: DepartmentCreate | null;
+    branch?: BranchCreate | null;
     onSuccess?: () => void;
 }
 
-export default function FormDepartment({ department, onSuccess }: Props) {
-    const { createDepartment, updateDepartment } = useDepartmentAction();
-    const [formData, setFormData] = useState<Partial<DepartmentCreate>>({});
+export default function FormBranch({ branch, onSuccess }: Props) {
+    const { createBranch, updateBranch } = useBranchAction();
+    const [formData, setFormData] = useState<Partial<BranchCreate>>({});
     const [showConfirm, setShowConfirm] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
     const { company } = useCompany();
-    const { branch } = useBranch();
-    const { user } = useUser();
 
-    const isUpdate = !!department;
+    const isUpdate = !!branch;
 
     // Populate form on update
     useEffect(() => {
-        if (department) {
+        if (branch) {
             setFormData({
-                name: department.name,
-                company_id: department.company_id,
-                branch_id: department.branch_id,
-                director_id: department.director_id,
+                name: branch.name,
+                company_id: branch.company_id,
+                address: branch.address,
+                contact: branch.contact,
             });
         } else {
             setFormData({});
         }
-    }, [department]);
+    }, [branch]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -59,10 +55,10 @@ export default function FormDepartment({ department, onSuccess }: Props) {
     const confirmSubmit = async () => {
         setIsSubmitting(true);
         try {
-            if (isUpdate && department?.id) {
-                await updateDepartment(department.id, formData as DepartmentCreate);
+            if (isUpdate && branch?.id) {
+                await updateBranch(branch.id, formData as BranchCreate);
             } else {
-                await createDepartment(formData as Omit<DepartmentCreate, 'id'>);
+                await createBranch(formData as Omit<BranchCreate, 'id'>);
                 setFormData({});
             }
             onSuccess?.();
@@ -83,26 +79,25 @@ export default function FormDepartment({ department, onSuccess }: Props) {
         setFormData((prev) => ({ ...prev, [field]: value || undefined }));
     };
 
-    const companyOptions = [{ value: '', label: 'Tidak ada' }, ...(company || []).map((c) => ({ value: String(c.id), label: c.name }))];
+    const handleTextareaChange = (value: string) => {
+        setFormData((prev) => ({ ...prev, address: value }));
+      };
 
-    const branchOptions = [{ value: '', label: 'Tidak ada' }, ...(branch || []).map((b) => ({ value: String(b.id), label: b.name }))];
-
-    const userOptions = [{ value: '', label: 'Tidak ada' }, ...(user || []).map((u) => ({ value: String(u.id), label: u.name }))];
-
+    const companyOptions = [...(company || []).map((d) => ({ value: String(d.id), label: d.name }))];
 
     return (
         <>
             <Form onSubmit={handleSubmit}>
-                <ComponentCard title={isUpdate ? 'Update Department' : 'Create Department'}>
+                <ComponentCard title={isUpdate ? 'Update branch' : 'Create branch'}>
                     <div className="grid gap-4">
                         <div>
-                            <Label>Nama Department</Label>
+                            <Label>Nama Cabang</Label>
                             <Input
                                 type="text"
                                 name="name"
                                 value={formData.name || ''}
                                 onChange={handleChange}
-                                placeholder="Nama Department"
+                                placeholder="Nama Cabang"
                             />
                         </div>
 
@@ -110,31 +105,33 @@ export default function FormDepartment({ department, onSuccess }: Props) {
                             <Label>Perusahaan</Label>
                             <Select
                                 options={companyOptions}
-                                placeholder="Pilih perusahaan"
+                                placeholder="Pilih Perusahaan"
                                 value={formData.company_id?.toString() || ''}
                                 onChange={(val) => handleSelectChange('company_id', val)}
                             />
                         </div>
 
                         <div>
-                            <Label>Cabang</Label>
-                            <Select
-                                options={branchOptions}
-                                placeholder="Pilih Cabang"
-                                value={formData.branch_id?.toString() || ''}
-                                onChange={(val) => handleSelectChange('branch_id', val)}
+                            <Label>Alamat</Label>
+                            <TextArea
+                                rows={3}
+                                value={formData.address || ''}
+                                onChange={handleTextareaChange}
+                                placeholder="Alamat"
                             />
                         </div>
 
                         <div>
-                            <Label>Direktur</Label>
-                            <Select
-                                options={userOptions}
-                                placeholder="Pilih direktur"
-                                value={formData.director_id?.toString() || ''}
-                                onChange={(val) => handleSelectChange('director_id', val)}
+                            <Label>Contact</Label>
+                            <Input
+                                type="text"
+                                name="contact"
+                                value={formData.contact || ''}
+                                onChange={handleChange}
+                                placeholder="Contact"
                             />
                         </div>
+
                     </div>
 
                     <div className="col-span-3 mt-8 max-w-sm text-center">
@@ -146,17 +143,17 @@ export default function FormDepartment({ department, onSuccess }: Props) {
                         </button>
                     </div>
                 </ComponentCard>
-            </Form>
+            </Form >
 
             <ConfirmationModal
                 isOpen={showConfirm}
                 onClose={() => setShowConfirm(false)}
                 onConfirm={confirmSubmit}
-                title={isUpdate ? 'Update Department?' : 'Tambah Department?'}
+                title={isUpdate ? 'Update branch?' : 'Tambah branch?'}
                 description={
                     isUpdate
-                        ? `Department "${formData.name}" akan diperbarui. Apakah Anda yakin?`
-                        : `Department baru akan ditambahkan dengan nama "${formData.name}". Lanjutkan?`
+                        ? `branch "${formData.name}" akan diperbarui. Apakah Anda yakin?`
+                        : `branch baru akan ditambahkan dengan nama "${formData.name}". Lanjutkan?`
                 }
                 confirmText={isUpdate ? 'Update' : 'Submit'}
                 cancelText="Batal"

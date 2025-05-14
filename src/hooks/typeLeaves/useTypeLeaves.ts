@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import { User } from '../../components/types/user';
+import { TypeLeaves } from '../../components/types/typeLeaves';
 import AxiosInstance from '@/lib/axios';
 import { parseCookies } from 'nookies';
 
-export function useUser() {
-  const [user, setUser] = useState<User[]>([]);
+export function useTypeLeaves() {
+  const [typeLeaves, setTypeLeaves] = useState<TypeLeaves[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    fetchUser();
+    fetchTypeLeaves();
   }, []);
 
-  const fetchUser = async () => {
+  const fetchTypeLeaves  = async () => {
     setLoading(true);
     try {
       const cookies = parseCookies();
@@ -22,13 +22,13 @@ export function useUser() {
         return;
       }
 
-      const res = await AxiosInstance.get<{ status: number; message: string; data: User[] }>('/v1/user', {
+      const res = await AxiosInstance.get<{ status: number; message: string; data: TypeLeaves[] }>('/v1/type-leave', {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
 
-      setUser(res.data.data);
+      setTypeLeaves(res.data.data);
     } catch (err) {
       setError(err);
     } finally {
@@ -39,5 +39,5 @@ export function useUser() {
 
 
 
-  return { user, loading, error,  refetch: fetchUser};
+  return { typeLeaves, loading, error,  refetch: fetchTypeLeaves};
 }

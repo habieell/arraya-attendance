@@ -7,3 +7,13 @@ export interface Branch {
     address: string;
     contact: string;
 }
+
+export interface BranchCreate {
+    id: number;    
+    company_id: string;
+    name: string;
+    address: string;
+    contact: string;
+  }
+
+

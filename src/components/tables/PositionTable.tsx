@@ -11,7 +11,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { ConfirmationModal } from "../ui/modal/ConfirmationModal";
 import usePositionAction from '@/hooks/position/usePositionAction';
 
-export default function DepartmentTable() {
+export default function PositionTable() {
     const { deletePosition } = usePositionAction();
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
     const { isOpen, openModal, closeModal } = useModal();
@@ -59,7 +59,7 @@ export default function DepartmentTable() {
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] bg-gray-50 dark:bg-white/[0.02]">
                                 <TableRow>
                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Nama</TableCell>
-                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Department</TableCell>
+                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Tempat</TableCell>
                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Level</TableCell>
                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-white">Aksi</TableCell>
                                 </TableRow>
@@ -73,7 +73,7 @@ export default function DepartmentTable() {
                                             onClick={() => setSelectedPosition(position)}
                                         >
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.name}</TableCell>
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.department?.name ?? "-"}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.department?.company?.name ?? "-"} - {position.department?.name ?? "-"}</TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{position.level}</TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
                                                 <div className="flex items-center gap-3">
@@ -104,7 +104,7 @@ export default function DepartmentTable() {
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={4} className="text-center py-4 text-gray-500">
-                                            Data department tidak tersedia.
+                                            Data Job Posisi tidak tersedia.
                                         </TableCell>
                                     </TableRow>
                                 )}

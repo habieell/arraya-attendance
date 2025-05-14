@@ -45,17 +45,17 @@ const navItems: NavItem[] = [
       { name: "Role", path: "/admin/tabel-role", pro: false },
       { name: "Karyawan", path: "/admin/tabel-karyawan", pro: false },
       { name: "Perusahaan", path: "/admin/tabel-perusahaan", pro: false},
-      { name: "Cabang Perusahaan", path: "/admin/tabel-perizinan", pro: false},
+      { name: "Cabang Perusahaan", path: "/admin/tabel-cabang", pro: false},
       { name: "Department", path: "/admin/tabel-department", pro: false},
       { name: "Job Posisi", path: "/admin/tabel-posisi", pro: false},
-      { name: "Shift Kerja", path: "/admin/tabel-perizinan", pro: false}
+      { name: "Shift Kerja", path: "/admin/tabel-shift", pro: false}
     ],
   },
   {
     name: "Absensi",
     icon: <TableIcon />,
     subItems: [
-      { name: "Tipe Perizinan", path: "/tabel-karyawan", pro: false },
+      { name: "Tipe Perizinan", path: "/admin/tabel-type-leave", pro: false },
       { name: "Perizinan", path: "/tabel-perizinan", pro: false},
       { name: "Absensi", path: "/tabel-perizinan", pro: false},
       { name: "History Approve", path: "/tabel-perizinan", pro: false}

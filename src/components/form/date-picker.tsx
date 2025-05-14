@@ -28,8 +28,11 @@ export default function DatePicker({
       mode: mode || "single",
       static: true,
       monthSelectorType: "static",
-      dateFormat: "Y-m-d",
+      dateFormat: "H:i", // Format jam dan menit
       defaultDate,
+      enableTime: true,
+      noCalendar: mode === "time", // hanya sembunyikan kalender jika mode time
+      time_24hr: true,
       onChange,
     });
 

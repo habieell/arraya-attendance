@@ -25,7 +25,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isLoading = false,
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="p-6 max-w-md">
+    <Modal isOpen={isOpen} onClose={onClose} className="p-6 max-w-md" showCloseButton={false}>
       <div className="space-y-5 text-center">
         <div className="mx-auto w-12 h-12 flex items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20">
           <AlertTriangle className="text-red-600 dark:text-red-400" size={24} />
