@@ -3,43 +3,17 @@
 import React from "react";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
+import { Leave } from "@/components/types/leave";
 
-interface Permission {
-  date: string;        // Tanggal pengajuan
-  startDate: string;   // Tanggal mulai izin
-  endDate: string;     // Tanggal akhir izin
-  type: "Izin" | "Sakit" | "Cuti";
-  reason: string;
-  status: "Disetujui" | "Ditolak" | "Menunggu";
-}
-
-interface UserPermission {
-  id: number;
-  name: string;
-  email: string;
-  department: string;
-  permissions: Permission[];
-  image?: string;
-}
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  data: {
-    user: UserPermission;
-    permission: Permission;
-  };
+    data: Leave;
 }
 
 export default function PerizinanDetailModal({ isOpen, onClose, data }: Props) {
-  const { user, permission } = data;
-
-  const statusColor =
-    permission.status === "Disetujui"
-      ? "bg-[#ecfdf3] text-[#039855]"
-      : permission.status === "Ditolak"
-      ? "bg-[#fef3f2] text-[#d92d20]"
-      : "bg-[#fffaeb] text-[#dc6803]";
+const leave = data;
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 z-[9999] overflow-y-auto">
@@ -54,38 +28,46 @@ export default function PerizinanDetailModal({ isOpen, onClose, data }: Props) {
           {/* FOTO & NAMA */}
           <div className="flex items-center gap-4 mb-6">
             <Image
-              src={user.image || "/images/user/user-17.jpg"}
-              alt={user.name}
+              src={leave.user.profile?.photo || "/images/user/user-17.jpg"}
+              alt={leave.user.name}
               width={60}
               height={60}
               className="rounded-full object-cover"
             />
             <div>
-              <h2 className="text-lg font-bold text-gray-800 dark:text-white">{user.name}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{user.department}</p>
+              <h2 className="text-lg font-bold text-gray-800 dark:text-white">{leave.user.profile?.full_name || "-"}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{leave.user.department.name}</p>
             </div>
           </div>
 
           {/* DETAIL */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-sm text-gray-700 dark:text-gray-300">
-            <p><span className="font-semibold">Email:</span> {user.email}</p>
-            <p><span className="font-semibold">Departemen:</span> {user.department}</p>
-            <p><span className="font-semibold">Jenis Izin:</span> {permission.type}</p>
-            <p><span className="font-semibold">Alasan:</span> {permission.reason}</p>
-            <p><span className="font-semibold">Tanggal Pengajuan:</span> {permission.date}</p>
-            <p><span className="font-semibold">Tanggal Mulai:</span> {permission.startDate}</p>
-            <p><span className="font-semibold">Tanggal Hingga:</span> {permission.endDate}</p>
+            <p><span className="font-semibold">Jenis Izin:</span>{leave.TypeLeave.name}</p>
+            <p><span className="font-semibold">Tanggal Pengajuan:</span>
+              {leave.created_at
+                ? new Date(leave.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false })
+                : '-'}
+            </p>
+            <p><span className="font-semibold">Mulai:</span>
+              {leave.start_date
+                ? new Date(leave.start_date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false })
+                : '-'}
+            </p>
+            <p><span className="font-semibold">Hingga:</span>
+              {leave.end_date
+                ? new Date(leave.end_date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false })
+                : '-'}
+            </p>
+            <p><span className="font-semibold">Alasan:</span>{leave.description}</p>
           </div>
 
-          {/* STATUS DI BAWAH */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Status Perizinan</p>
-            <div className={`inline-block text-base px-5 py-2 rounded-full font-semibold ${statusColor}`}>
-              {permission.status}
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Photo</p>
+            <div className="inline-block text-base px-5 py-2 rounded-full fon t-semibold">
+              {leave.url_photo}
             </div>
           </div>
 
-          {/* BUTTON */}
           <div className="mt-8 text-end">
             <button
               onClick={onClose}
