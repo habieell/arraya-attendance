@@ -57,7 +57,7 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Tipe Perizinan", path: "/admin/tabel-type-leave", pro: false },
       { name: "Perizinan", path: "/tabel-perizinan", pro: false},
-      { name: "Absensi", path: "/tabel-perizinan", pro: false},
+      { name: "History Absensi", path: "/admin/tabel-absen", pro: false},
       { name: "History Approve", path: "/tabel-perizinan", pro: false}
     ],
   },

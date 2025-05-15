@@ -4,6 +4,8 @@ import { Attendance } from '../../components/types/attendance';
 import AxiosInstance from '@/lib/axios';
 import { parseCookies } from 'nookies';
 
+
+// all
 export function useAttendance() {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,6 +45,7 @@ export function useAttendance() {
   return { attendance, loading, error,  refetch: fetchAttendance};
 }
 
+// per user
 export function useAttendanceUser(id: string | null) {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
