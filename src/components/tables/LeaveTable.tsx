@@ -19,7 +19,7 @@ export default function LeaveTable() {
                         <Table>
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] bg-gray-50 dark:bg-white/[0.02]">
                                 <TableRow>
-                                    <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-700 dark:text-white">Tanggal Pengajuan</TableCell>
+                                    <TableCell isHeader className="py-3 text-sm font-medium text-gray-700 dark:text-white">Tanggal Pengajuan</TableCell>
                                     <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-700 dark:text-white">Nama</TableCell>
                                     <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-700 dark:text-white">Departemen</TableCell>
                                     <TableCell isHeader className="px-5 py-3 text-sm font-medium text-gray-700 dark:text-white">Jenis Izin</TableCell>
@@ -52,8 +52,8 @@ export default function LeaveTable() {
                                                     <span>{l.user.profile?.full_name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white">{l.user.department?.name}</TableCell>
-                                            <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white">{l.TypeLeave?.name}</TableCell>
+                                            <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white text-center">{l.user.department?.name?? "-"}</TableCell>
+                                            <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white text-center">{l.type_leave?.name?? "-"}</TableCell>
                                         </TableRow>
                                     ))
                                 ) : (

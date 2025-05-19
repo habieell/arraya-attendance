@@ -6,7 +6,7 @@ import { useAttendance } from "@/hooks/attendance/useAttendance";
 import { Attendance } from "@/components/types/attendance";
 import AbsenDetailModal from "../../components/example/ModalExample/DetailAbsenModal"
 import PhotoModal from "@/components/example/ModalExample/PhotoModal";
-import {View} from "lucide-react"
+import { View } from "lucide-react"
 
 
 export default function HistoryAbsenTable() {
@@ -46,29 +46,42 @@ export default function HistoryAbsenTable() {
                                         <TableRow
                                             key={attendance.id}
                                             className="hover:bg-gray-50 dark:hover:bg-white/[0.05] cursor-pointer"
-                                            onClick={() => setSelectedAttendance(attendance)}
                                         >
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
                                                 {attendance.date
-                                                    ? new Date(attendance.date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false })
+                                                    ? new Date(attendance.date).toLocaleDateString('id-ID', {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })
                                                     : '-'}
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{attendance.user.name ?? "-"}</TableCell>
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{attendance.chek_in_time ?? "-"}</TableCell>
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
+                                                {attendance.chek_in_time
+                                                    ? new Date(attendance.chek_in_time).toLocaleTimeString('id-ID', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        second: '2-digit',
+                                                        hour12: false,
+                                                    })
+                                                    : '-'}
+                                            </TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">{attendance.chek_out_time ?? "-"}</TableCell>
                                             <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
                                                 <button
                                                     onClick={() => openPhoto(attendance.photo_in)}
-                                                    className="text-yellow-600 hover:text-yellow-800"
+                                                    className="text-green-500 hover:text-green-800"
                                                 >
                                                     <View size={18} /> Lihat Foto
                                                 </button>
                                             </TableCell>
 
-                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">
+                                            <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white text-justify">
                                                 <button
                                                     onClick={() => openPhoto(attendance.photo_out)}
-                                                    className="text-yellow-600 hover:text-yellow-800"
+                                                    className="text-red-500 hover:text-red-800"
                                                 >
                                                     <View size={18} /> Lihat Foto
                                                 </button>
@@ -79,11 +92,11 @@ export default function HistoryAbsenTable() {
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             setSelectedAttendance(attendance);
-                                                            setShowDetailModal(true); // Tampilkan modal detail
+                                                            setShowDetailModal(true);
                                                         }}
                                                         className="text-yellow-600 hover:text-yellow-800"
                                                     >
-                                                        <View size={18} />
+                                                        <View size={18} /> Detail
                                                     </button>
                                                 </div>
                                             </TableCell>

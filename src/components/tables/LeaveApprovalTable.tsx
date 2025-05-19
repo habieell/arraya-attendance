@@ -50,7 +50,7 @@ export default function LeaveApproveTable() {
                                                     <span>{l.leave.user.department.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white">{l.leave.TypeLeave.name}</TableCell>
+                                            <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white">{l.leave.type_leave.name}</TableCell>
                                             <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white">{l.approved_by.name}</TableCell>
                                             <TableCell className="px-5 py-4 text-sm text-gray-700 dark:text-white">{l.status}</TableCell>
                                               <TableCell className="px-4 py-3 text-sm text-gray-700 dark:text-white">

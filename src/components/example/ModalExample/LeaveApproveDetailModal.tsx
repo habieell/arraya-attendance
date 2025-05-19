@@ -45,7 +45,7 @@ export default function LeaveApproveDetailModal({ isOpen, onClose, data }: Props
 
           {/* DETAIL IZIN */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-sm text-gray-700 dark:text-gray-300 mb-8">
-            <p><span className="font-semibold">Jenis Izin:</span> {LeaveApproval.leave.TypeLeave?.name || "-"}</p>
+            <p><span className="font-semibold">Jenis Izin:</span> {LeaveApproval.leave.type_leave?.name || "-"}</p>
             <p><span className="font-semibold">Tanggal Pengajuan:</span> 
               {LeaveApproval.leave.created_at 
                 ? new Date(LeaveApproval.leave.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) 

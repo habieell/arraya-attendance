@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Attendance } from "@/components/types/attendance";
 import { getLocation } from '@/hooks/getLokasi'
+import { X } from "lucide-react";
 
 
 interface Props {
@@ -66,6 +67,14 @@ export default function DetailAbsenModal({ isOpen, onClose, attendance }: Props)
             <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]" aria-hidden="true" />
 
             <div className="relative z-[9999] max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-xl bg-white p-8 shadow-xl dark:bg-gray-800">
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+                    aria-label="Close"
+                >
+                    <X size={24} />
+                </button>
+
                 <Dialog.Title className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
                     Detail Absensi
                 </Dialog.Title>
@@ -82,7 +91,16 @@ export default function DetailAbsenModal({ isOpen, onClose, attendance }: Props)
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300 mb-8">
-                    <p><strong>Jam Masuk </strong> {attendance.chek_in_time}</p>
+                    <p><strong>Jam Masuk </strong>
+                        {attendance.chek_in_time
+                            ? new Date(attendance.chek_in_time).toLocaleTimeString('id-ID', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: false,
+                            })
+                            : '-'}
+                    </p>
                     <p><strong>Lokasi Absen masuk</strong> {lokasiMasuk ?? "-"}</p>
                     <p><strong>Status</strong> {attendance.user.profile?.phone_number ?? "-"}</p>
                     <p><strong>Jam Pulang</strong> {attendance.user.company?.name ?? "-"}</p>

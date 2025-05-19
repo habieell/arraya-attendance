@@ -4,7 +4,7 @@ import { TypeLeaves } from "./typeLeaves";
 export interface Leave {
     id: number;
     user: User;
-    TypeLeave: TypeLeaves;
+    type_leave: TypeLeaves;
     url_photo: string;
     start_date: Date;
     end_date: Date;
