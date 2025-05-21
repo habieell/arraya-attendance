@@ -53,6 +53,7 @@ export default function FormCompany({ company, onSuccess }: Props) {
       if (isUpdate && company?.id) {
         await updateCompany(company.id, formData as Company);
         toast.success('Data perusahaan berhasil diperbarui');
+        setFormData({});
       } else {
         await createCompany(formData as Omit<Company, 'id'>);
         toast.success('Data perusahaan berhasil dibuat');
