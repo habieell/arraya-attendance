@@ -104,7 +104,7 @@ export default function FormUser({ user, onSuccess }: Props) {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleTextareaChange = (value: string) => {
+    const handleTextareaChange =  (value: string) => {
         setFormData((prev) => ({ ...prev, address: value }));
     };
 
@@ -222,7 +222,7 @@ export default function FormUser({ user, onSuccess }: Props) {
                             <Label>Full Name</Label>
                             <Input
                                 type="text"
-                                name="fullName"
+                                name="full_name"
                                 value={formData.full_name || ''}
                                 onChange={handleChange}
                                 placeholder="Nama lengkap"
@@ -264,7 +264,7 @@ export default function FormUser({ user, onSuccess }: Props) {
                             <Label>No. HP</Label>
                             <Input
                                 type="text"
-                                name="phoneNumber"
+                                name="phone_number"
                                 value={formData.phone_number || ''}
                                 onChange={handleChange}
                                 placeholder="08xxxxxxxx"
