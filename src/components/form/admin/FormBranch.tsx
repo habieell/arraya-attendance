@@ -57,6 +57,7 @@ export default function FormBranch({ branch, onSuccess }: Props) {
         try {
             if (isUpdate && branch?.id) {
                 await updateBranch(branch.id, formData as BranchCreate);
+                setFormData({});
             } else {
                 await createBranch(formData as Omit<BranchCreate, 'id'>);
                 setFormData({});

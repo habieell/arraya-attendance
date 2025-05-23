@@ -57,6 +57,7 @@ export default function FormShift({ shift, onSuccess }: Props) {
         try {
             if (isUpdate && shift?.id) {
                 await updateShift(shift.id, formData as ShiftCreate);
+                setFormData({});
             } else {
                 await createShift(formData as Omit<ShiftCreate, 'id'>);
                 setFormData({});

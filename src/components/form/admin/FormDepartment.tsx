@@ -61,6 +61,7 @@ export default function FormDepartment({ department, onSuccess }: Props) {
         try {
             if (isUpdate && department?.id) {
                 await updateDepartment(department.id, formData as DepartmentCreate);
+                setFormData({});
             } else {
                 await createDepartment(formData as Omit<DepartmentCreate, 'id'>);
                 setFormData({});

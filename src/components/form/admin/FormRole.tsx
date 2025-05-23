@@ -48,10 +48,9 @@ export default function FormRole({ role, onSuccess }: Props) {
     try {
       if (isUpdate && role?.id) {
         await updateRole(role.id, formData as Role);
-
+        setFormData({});
       } else {
         await createRole(formData as Omit<Role, 'id'>);
-
         setFormData({});
       }
       onSuccess?.();

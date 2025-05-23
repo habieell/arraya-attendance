@@ -78,6 +78,7 @@ export default function FormUser({ user, onSuccess }: Props) {
         try {
             if (isUpdate && user?.id) {
                 await updateUser(user.id, formData as UserCreate);
+                setFormData({});
             } else {
                 await createUser(formData as Omit<UserCreate, 'id'>);
                 setFormData({});

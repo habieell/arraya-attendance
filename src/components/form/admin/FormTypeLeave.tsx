@@ -50,6 +50,7 @@ export default function FormTypeLeaves({ typeLeaves, onSuccess }: Props) {
         try {
             if (isUpdate && typeLeaves?.id) {
                 await updateTypeLeaves(typeLeaves.id, formData as TypeLeaves);
+                setFormData({});
             } else {
                 await createTypeLeaves(formData as Omit<TypeLeaves, 'id'>);
                 setFormData({});

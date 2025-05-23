@@ -56,6 +56,7 @@ export default function FormPosition({ position, onSuccess }: Props) {
         try {
             if (isUpdate && position?.id) {
                 await updatePosition(position.id, formData as PositionCreate);
+                setFormData({});
             } else {
                 await createPosition(formData as Omit<PositionCreate, 'id'>);
                 setFormData({});
